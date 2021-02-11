@@ -1,0 +1,62 @@
+# ================================================== GENERAL ===========================================================
+general:
+  name:        'SimClrBase'                             # Name your experiment
+  saveDir:     'assets\checkpoints\SimClrBase'          # Where to save the checkpoints
+  logsDir:     'assets\logs\SimClrBase'                 # Where to save logs
+  device:      'cuda'                                   # As if one would train this on cpu... ... ... ...
+  cudaDevices: ['0']                                    # If one has multiple GPUs, select from them
+
+# ================================================== TRAIN =============================================================
+train:
+  noEpochs: 100                                         # Number of training epochs
+  loadEpoch: 0                                          # Load epoch (used when resuming)
+
+# ================================================== DATA ==============================================================
+data:
+  dataset:      'CIFAR10'                               # Name from torchvision, available [CIFAR10]
+  rootPath:     './assets/datasets/'                    # Dir to save the dataset
+  trainBatch:   256                                     # Training batch size    [256 should fit in 8GB RTX2080]
+  valBatch:     256                                     # Validation batch size  [256 should fit in 8GB RTX2080]
+  trainWorkers: 6                                       # No of threads to fetch train data [dependent on your CPU]
+  valWorkers:   6                                       # No of threads to fetch   val data [dependent on your CPU]
+  trainSize:    [128, 128]                              # Training size (too small can decrease ResNet performance)
+
+# ================================================== MODEL =============================================================
+model:
+  kwargs:
+    inChNo:         3                                   # RGB => 3 channels
+    latentChNo:     512                                 # Latent size H
+    outChNo :       64                                  # Latent size of Z
+    encoderStrides: [2, 2, 2, 2, 2, 2]                  # At each 2, the spatial dimension will be halfed
+    mlpLayers:      [128, 128]                          # Layers in the MLP (projection function)
+    norm:           'BatchNorm2d'                       # Normalization layer for encoder
+    normKwargs:     {}                                  # Kwargs passed to it
+    activ:          'ReLU'                              # Activation function used in encoder
+    activKwargs:
+      inplace:      True                                # If ReLU, keeps the memory usage down
+    lastActiv:      None                                # No activation for the last layer of MLP
+    lastActivKwargs: {}                                 # No activation, no args for it
+    dropRate:       None                                # Dropout rate for the MLP layers
+    dropLayers:     1                                   # Apply dropout on this last layers
+
+# ================================================== LOSS ==============================================================
+loss:
+  temperature: 0.5                                      # Temperature of the loss function
+
+# ================================================== OPTIMIZERS ========================================================
+optimizer:
+  optimName:      'Adam'                                # Optimizer name from PyTorch [defaulf, Adam]
+  optimKwargs:
+    betas:        (0.9, 0.999)
+    weight_decay: 1e-06                                 # Weight decay should be small 1e-6 (regularization)
+  lr:             0.0003                                # Small learning rate 3e-4
+  schedPack:      'torch.optim.lr_scheduler'            # Learning rate scheduler package
+  schedName:      None                                  # Learning rate scheduler name
+  schedKwargs:    {}                                    # I did not find it that usefull to train with LrSched
+
+# ================================================== LOG ===============================================================
+log:
+  evalEpoch: 5                                          # Log embeddings to Tensorboard
+  infoSteps: 5                                          # Update Tqdm bar (measure in no of batches)
+  logLevel: 20                                          # Logging module stuff
+  saveEpoch: 5                                          # Save every this no of epochs

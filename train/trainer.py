@@ -2,11 +2,12 @@ import torch
 import importlib
 
 import torchvision.datasets
-from torch.utils.data import DataLoader
-from core.nn.loss.nt_xent import NTXent
-from core.networks.simclr import SimCLR
-from core.nn.utils.base_trainer import BaseTrainer
+from torch.utils.data            import DataLoader
+from core.nn.loss                import NTXent
+from core.networks.simclr        import SimCLR
+from core.nn.utils.base_trainer  import BaseTrainer
 from core.data.data_augmentation import ImageTransforms, IMAGENER_STD, IMAGENET_MEAN
+
 # ######################################################################################################################
 #                                               LANE SEGMENTATION TRAINER
 # ######################################################################################################################
@@ -16,10 +17,10 @@ class SimCLRTrainer(BaseTrainer):
 
     # ================================================== INIT DATA =====================================================
     def init_train_data(self, cfg):
-
         c = cfg.data
+
         dataset  = getattr(torchvision.datasets, c.dataset)
-        imgTrans = ImageTransforms(c.trainSize, c.valSize)
+        imgTrans = ImageTransforms(c.trainSize)
 
         # train data
         trainDataset   = dataset(root=c.rootPath, train=True, transform=imgTrans, download=True)
@@ -38,17 +39,18 @@ class SimCLRTrainer(BaseTrainer):
         self.network = SimCLR(**dict(c.kwargs)).build()
         self.nameModels.append('network')
 
+        # set-up weights
         self.network.init_weights()
-        if cfg.train.loadEpoch >= 0:
+        if cfg.train.loadEpoch > 0:
             self.load_models(cfg.train.loadEpoch)
 
-        # copy the model to the desired device
+        # copy the model to device
         self.network.to(cfg.general.device)
 
     # =============================================== REGISTER LOSS ====================================================
     def init_losses(self, cfg):
-
         c = cfg.loss
+
         self.loss = NTXent(cfg.data.trainBatch, c.temperature)
 
     # =============================================== REGISTER OPTIMIZER ===============================================
@@ -78,31 +80,29 @@ class SimCLRTrainer(BaseTrainer):
 
         c = self.cfg
 
-        # copy the data to the specific device
+        # step 1 - copy the data to the specific device
         augImages   = args[0][0].to(c.general.device)
         plainImages = args[0][1].to(c.general.device)
 
         if augImages.shape[0] < self.cfg.data.trainBatch:
             return None
 
-        # reset gradients
+        # step 2 - reset gradients
         self.optimizer.zero_grad()
         self.network.zero_grad()
 
-        # iterate over the batch
+        # step 3 - get representations
         hA, zA  = self.network(augImages)
         hB, zB  = self.network(plainImages)
 
-        # update losses
+        # step 4 - compute losses
         loss = self.loss(zA, zB)
 
-        # compute gradients
+        # step 5 - backprop
         loss.backward()
-
-        # backprop
         self.optimizer.step()
 
-        # update learning rate
+        # step 6 - update learning rate
         if hasattr(self, 'scheduler'):
             self.scheduler.step()
 
@@ -110,13 +110,16 @@ class SimCLRTrainer(BaseTrainer):
 
     # ================================================== EVALUATE RESULTS ==============================================
     def evaluate(self, *args, **kwargs):
+        self.network.eval()
         plainImages = args[0][1].to(self.cfg.general.device)
 
         with torch.no_grad():
             h, _        = self.network(plainImages)
             h           = h.cpu()
             plainImages = plainImages.cpu().mul_(IMAGENER_STD).add_(IMAGENET_MEAN).clamp(0, 1)
-            plainImages = torch.nn.functional.interpolate(plainImages, (32,32))
+            plainImages = torch.nn.functional.interpolate(plainImages, (32, 32)) # max size allowed by Tensorboard
+
+        self.network.train()
         return h, plainImages
 
     # ================================================== GET LR ========================================================
@@ -141,4 +144,4 @@ if __name__ == '__main__':
 
     print(input)
     print(target)
-    print(BCEWithLogitsLoss(reduction='mean')(input, target))
+

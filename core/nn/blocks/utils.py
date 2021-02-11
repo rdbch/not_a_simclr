@@ -2,13 +2,13 @@ import importlib
 
 # ================================================== SAME PADDING ======================================================
 def same_padding(kSize, dilSize):
-    '''
-    Mimics the 'same' padding.
+    """
+    Function that return the the paremeters for obtaining the "same" padding type.
 
-    :param kSize: integer denoting the kernel size
-    :param dil:   integer denoting the dillation rate of the conv block
+    :param kSize:   int denoting the kernel size
+    :param dilSize: int denoting the dilation rate of the conv block
     :return:
-    '''
+    """
 
     kSizeEffective = kSize + (kSize - 1) * (dilSize - 1)
     padTotal       = kSizeEffective - 1
@@ -19,13 +19,13 @@ def same_padding(kSize, dilSize):
 
 # ================================================== SIMPLE IMPORT =====================================================
 def simple_import(name, pack):
-    '''
+    """
     Import a module by name and return a given sub-module.
 
     :param pack: the name of the module
     :param name: name of the submodule to be returned
     :return:
-    '''
+    """
     if name is not None:
         return getattr(importlib.import_module(pack, name), name)
 

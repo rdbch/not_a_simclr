@@ -8,10 +8,11 @@ from core.nn.blocks.utils import simple_import, same_padding
 class ResBlock(nn.Module):
     def __init__(self, inChNo, outChNo, hidChNo=None, kernel=3, stride=1, lastActiv=True, padType='ReflectionPad2d',
                  activType='ReLU', activKwargs={}, normType=None, normKwargs={}, **kwargs):
-        '''
-        Bare bones residual block
-        1.Pad - conv - norm - act
-        2.Pad - conv - norm - act
+        """
+        Residual Block. A simple class that groups the common structure.
+        ResBlock = Pad + Conv + Norm + Non-linearity +
+                   Pad + Conv + Norm + Non-linearity
+
         :param inChNo:      number of in channels
         :param outChNo:     number of out channels
         :param hidChNo:     the number of inner/hidden channels
@@ -25,7 +26,7 @@ class ResBlock(nn.Module):
         :param normPack:    from where to import the normalization
         :param spectral:    from where to import the normalization
         :param kwargs:      other kwargs to be passed to the conv layer
-        '''
+        """
         super().__init__()
 
         self.inChNo  = inChNo

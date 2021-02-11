@@ -1,3 +1,5 @@
+# refactored from  https://github.com/Spijkervet/SimCLR/blob/847eac3cb4f2e4102451c0c485d6968efa230901/simclr/modules
+
 import torch
 import torch.nn as nn
 
@@ -6,7 +8,6 @@ import torch.nn as nn
 # ######################################################################################################################
 class NTXent(nn.Module):
     def __init__(self, batchSize, temperature):
-
         super().__init__()
 
         self.batchSize   = batchSize
@@ -38,7 +39,6 @@ class NTXent(nn.Module):
         simAB = torch.diag(sim,  self.batchSize)
         simBA = torch.diag(sim, -self.batchSize)
 
-        # We have 2N samples, but with Distributed training every GPU gets N examples too, resulting in: 2xNxN
         posSamples = torch.cat((simAB, simBA), dim=0).reshape(N, 1)
         nevSamples = sim[self.__mask].reshape(N, -1)
 

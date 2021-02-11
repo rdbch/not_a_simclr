@@ -1,41 +1,52 @@
 import torch
 from torch import nn
 
-from core.nn.blocks.linear_block import LinearBlock
+from core.nn.blocks             import LinearBlock
 from core.nn.utils.configurable import Configurable
 
-
-# ================================================== MLP ===============================================================
+# ######################################################################################################################
+#                                                        MLP
+# ######################################################################################################################
 class MLP(nn.Module, Configurable):
     def __init__(self, inChNo=64, outChNo=None, layerCfg=(64, 64), **kwargs):
-        '''
-        Multi layer perceptron class
-        :param inChNo           : number of input features
-        :param outChNo          : number of output features (if None, use layerCfg[-1])
-        :param layerCfg         : a list containing the number of neurons for each layer
-        :param kwargs
-        :param activ            : activation used on the output of each layer
-        :param activKwargs      : kwargs for activ
-        :param activLast        : activation used on the last layer
-        :param activLastKwargs  : kwargs for activLast
-        :param normType         : normalization type (name from torch)
-        :param normKwargs       : kwargs passed to normalization
-        :param dropRate         : dropout rate
-        :param dropLayers       : only apply dropout on the last dropLayers
-        '''
+        """
+        Multi layer perceptron class.
+
+        It is a module list  of LinearBlocks
+        LinearBlock = LinearUnit + Normalization + Activation
+
+        Example:
+            mlp = MLP(inChNo=100, outChNo=10, layerCfg=(64, 64, 64)).build()
+            res = mlp(tensor)
+
+        :param inChNo          : Number of of input features (channels)
+        :param outChNo         : Number of output features (if None, use layerCfg[-1])
+        :param layerCfg        : List containing the number of neurons for each layer
+        :param activ           : Activation used on the output of each layer *
+        :param activKwargs     : Kwargs for activ (see Pytorch docs)
+        :param activLast       : Activation applied on the last layer *
+        :param activLastKwargs : Kwargs for the last activ (see Pytorch docs)
+        :param norm            : Normalization layer name *
+        :param normKwargs      : Kwargs passed to normalization layer
+        :param dropRate        : Dropout rate [0, 1]
+        :param dropLayers      : Apply dropout only on the last dropLayers
+
+        * Use a string with the PyTorch name (i.e. BatchNorm2d, ReLU, etc)
+        """
         super().__init__()
 
+        # params
         self.inChNo   = inChNo
         self.outChNo  = outChNo
         self.layerCfg = layerCfg
 
+        self.build_params()
         self.build_hparams(**kwargs)
 
     # =============================================== INTERNAL CONFIG ==================================================
     @Configurable.hyper_params()
     def build_hparams(self, **kwargs):
-        ''' This method sets up the hyperparameters. Default values are provided.'''
-
+        # hparams
         return {
             'norm'      :  None,  'normKwargs'      : {},
             'activ'     : 'ReLU', 'activKwargs'     : {},
@@ -46,10 +57,10 @@ class MLP(nn.Module, Configurable):
 
     # =============================================== BUILD ============================================================
     def build(self):
-        '''
-        Build the layer configuration of the components.
-        :return: self
-        '''
+        """
+        Call this for initializing the modules of the network.
+        :return:
+        """
 
         model = nn.ModuleList()
 
@@ -76,6 +87,11 @@ class MLP(nn.Module, Configurable):
 
     # =============================================== CHECK DROPOUT ====================================================
     def __use_droput(self, i):
+        """
+        Compute if we want to apply DropOut to a layer or not.
+        :param i: the current layer index
+        :return: bool
+        """
         if self.dropRate is not None:
             if self.dropRate > 0:
                 if i > (len(self.layerCfg) - self.dropLayers):
@@ -85,11 +101,12 @@ class MLP(nn.Module, Configurable):
 
     # =============================================== FORWARD ==========================================================
     def forward(self, inTensor):
-        '''
-        :param inTensor: input tensor
-        :return: prediction
-        '''
-        for module in self.model:
+        """
+        :param inTensor: input tensor [B, N]
+        :return:
+        """
+
+        for name, module in self.model.named_children():
             inTensor = module(inTensor)
 
         return inTensor

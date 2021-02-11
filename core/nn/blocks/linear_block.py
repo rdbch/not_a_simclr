@@ -10,6 +10,20 @@ class LinearBlock(nn.Module):
                  activType = 'ReLU',  activKwargs = {},
                  normType  = None,    normKwargs  = {},
                  dropRate  = 0.0,     **kwargs):
+        """
+        Linear block. A simple class that groups the common structure
+        LinearBlock = Linear + Norm + Non-linearity + [Dropout]
+
+        :param inChNo      : Number of of input features (channels)
+        :param outChNo     : Number of output features (if None, use layerCfg[-1])
+        :param activType   : Activation used on the output of each layer *
+        :param activKwargs : Kwargs for activ (see Pytorch docs)
+        :param norm        : Normalization layer name *
+        :param normKwargs  : Kwargs passed to normalization layer
+        :param dropRate:   : Dropout rate
+        :param bias        : Use bias or not
+        :param kwargs:
+        """
         super().__init__()
 
         model = nn.ModuleList()

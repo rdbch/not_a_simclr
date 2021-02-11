@@ -19,6 +19,7 @@ class BaseTrainer:
         self.nameLosses = []
         self.nameOptims = []
 
+        # init things in this order
         for init in ['init_train_data', 'init_networks', 'init_losses', 'init_optimizers']:
             getattr(self, init)(cfg)
 

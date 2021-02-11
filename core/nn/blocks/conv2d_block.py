@@ -6,28 +6,32 @@ from core.nn.blocks.utils import simple_import, same_padding
 #                                               CONV2D BLOCK
 # ######################################################################################################################
 class Conv2dBlock(nn.Module):
-    def __init__(self, inChNo, outChNo, kernel, padType = 'ReflectionPad2d', spectral = False,
-                 activType = 'ReLU',  activKwargs = {},
-                 normType  = None,    normKwargs  = {},
+    def __init__(self, inChNo, outChNo, kernel,
+                 padType   = 'ReflectionPad2d', spectral    = False,
+                 activType = 'ReLU',            activKwargs = {},
+                 normType  = None,              normKwargs  = {},
                  **kwargs):
-        '''
-        Convolution block. A simple class that groups the common structure  pad -> conv -> norm -> relu sequence.
+        """"
+        Convolution block. A simple class that groups the common structure
+        ConvBlock = Pad + Conv + Norm + Non-linearity
+
         It is to be noted that by default, if a normalization layer is used, the bias is disabled by default(it can be
         overwritten)
-        :param inChNo:      number of input channels
-        :param outChNo:     number of output channels
-        :param kernel:      the kernel size for the convolution layer
-        :param padType:     padding type (default: ReflectionPad2d)
-        :param padPack:     the package where the padding can be found (default: torch.nn)
-        :param activType:   activation type (default: ReLU)
-        :param activKwargs: dictionary of arguments to be passed to the activation layer
-        :param activPack:   the package where the activation layer can be found (default: torch.nn)
-        :param normType:    normalization type (default: BatchNorm2d)
-        :param normKwargs:  dictionary of arguments to be passed to the normalization layer
-        :param normPack:    the package where the normalization layer can be found (default: torch.nn)
-        :param spectral:    apply spectral normalization to the convolution layer
-        :param kwargs:      any are keyword arguments will be passed to the convolution layer
-        '''
+
+        :param inChNo:      Number of input channels
+        :param outChNo:     Number of output channels
+        :param kernel:      The kernel size for the convolution layer
+        :param padType:     Padding type (default: ReflectionPad2d)
+        :param padPack:     The package where the padding can be found (default: torch.nn)
+        :param activType:   Activation type (default: ReLU)
+        :param activKwargs: Dictionary of arguments to be passed to the activation layer
+        :param activPack:   The package where the activation layer can be found (default: torch.nn)
+        :param normType:    Normalization type (default: BatchNorm2d)
+        :param normKwargs:  Dictionary of arguments to be passed to the normalization layer
+        :param normPack:    The package where the normalization layer can be found (default: torch.nn)
+        :param spectral:    Apply spectral normalization to the convolution layer
+        :param kwargs:      Any are keyword arguments will be passed to the convolution layer
+        """
         super().__init__()
 
         # import normalization layer and activation
