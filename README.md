@@ -102,13 +102,13 @@ class SimCLR(nn.Module, Configurable):
         [...]
         
     def build(self):
-        self.encoder = ResNet( .... )              <=== You will work here ⚠⚠⚠
+        self.encoder = ResNet( .... )              # <=== You will work here ⚠⚠⚠
         self.project = [...]
         
         return self
        
     def forward(self, inTensor):
-        h = self.encoder(inTensor)                <=== The effect ⚠⚠⚠
+        h = self.encoder(inTensor)                 # <=== The effect ⚠⚠⚠
         z = self.project(h)
         
         return h, z
@@ -132,7 +132,7 @@ ResNet(
     activKwargs = self.activKwargs     # dict      : What params does activ have? Maybe you can speed it up(default: {})
     strides     = self.encoderStrides, # list[int] : A list of 6 ints, where an element represents the stride at each step in ResNet
     downType    = 'maxpool',           # str       : Ho do we reduce spatial dims? ['maxpool', 'avgpool' or 'conv'] 
-    lastPool    = True,                # bool       : This will take the last feature map, and remove the spatial dims by AvgPool
+    lastPool    = True,                # bool      : This will take the last feature map, and remove the spatial dims by AvgPool
     archType    = self.archType,       # str       : ResNet architecture ['18','34']. For ResNet18, 1 epoch ~ 1 min (total 100 epochs)
     ).build()
 
@@ -166,13 +166,13 @@ class SimCLR(nn.Module, Configurable):
         
     def build(self):
         self.encoder = ResNet( .... )  
-        self.project = MLP(...)                 <=== You will work here ⚠⚠⚠
+        self.project = MLP(...)                 # <=== You will work here ⚠⚠⚠
         
         return self
        
     def forward(self, inTensor):
         h = self.encoder(inTensor)
-        z = self.project(h)                        <=== The effect ⚠⚠⚠
+        z = self.project(h)                     # <=== The effect ⚠⚠⚠
         
         return h, z
    
@@ -199,7 +199,7 @@ MLP(
     activKwargs     = self.activKwargs   # dict      : What params does activ have? Maybe you can speed it up(default: {})
     dropRate        = self.dropRate,     # float     : Dropout rate, in interval [0, 1]
     dropLayers      = dropLayers,        # int       : Apply dropout on this last no of layers
-    lastActiv       = None,              # str *       : No activation prefferably
+    lastActiv       = None,              # str *     : No activation prefferably
     lastActivKwargs = {},                # str       : No activation, no arguments 😊
     ).build()
 
