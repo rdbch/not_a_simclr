@@ -1,5 +1,5 @@
 # SimCLR - A naive tutorial
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/rdbch/tutorial_simclr)
 ## 1. Installation
 #### Conda
 If CUDA 10.2 is compatible with your device, you can simply create your environment with 
