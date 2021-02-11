@@ -1,17 +1,18 @@
 # SimCLR - A naive tutorial
 
 ## 1. Installation
-Conda
+#### Conda
 If CUDA 10.2 is compatible with your device, you can simply create your environment with 
 ```
 $ conda create --name <env> --file req_conda.txt
 ```
 
-pip
+#### pip
 If one does not use Conda, you can manually install PyTorch from this [link](https://pytorch.org/get-started/locally/) and get your other requirements by running:
 ```
 $ pip install -r req_pip.txt
 ```
+
 
 ## 2. Theoretical informations
 
