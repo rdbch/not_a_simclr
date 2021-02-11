@@ -124,11 +124,6 @@ class SimCLRTrainer(BaseTrainer):
 
     # ================================================== GET LR ========================================================
     def get_lr(self):
-        """
-        Return the learning rates registered in the optimizer.
-        :return:  a dict with the learning rates
-        """
-
         lrs = {}
         for i, pg in enumerate(self.optimizer.param_groups):
             lrs[f'lr_{i}'] = pg['lr']
