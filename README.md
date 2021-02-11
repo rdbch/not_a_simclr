@@ -76,7 +76,7 @@ class ImageTransforms:
    # . . .
         
     def __class__(self, image)
-    	firstAug  = self.firstAugTrans(image)
+        firstAug  = self.firstAugTrans(image)
         secondAug = self.secondAugTrans(image)
       
         return firstAug, secondAug
@@ -98,17 +98,17 @@ This is the high level view of the model
 
 ```python
 class SimCLR(nn.Module, Configurable):
-	def __init__(self, *args, **kwargs):
-		[...]
+    def __init__(self, *args, **kwargs):
+        [...]
         
     def build(self):
-        self.encoder = ResNet( .... )  			<=== You will work here ⚠⚠⚠
+        self.encoder = ResNet( .... )              <=== You will work here ⚠⚠⚠
         self.project = [...]
         
         return self
-   	
+       
     def forward(self, inTensor):
-        h = self.encoder(inTensor)				<=== The effect ⚠⚠⚠
+        h = self.encoder(inTensor)                <=== The effect ⚠⚠⚠
         z = self.project(h)
         
         return h, z
@@ -124,17 +124,17 @@ This is encoder definition in the ```.build()``` method. By answering to this qu
 
 ```python
 ResNet(
-    inChNo      = self.inChNo,		   # int       : How many channels in RGB?         
-    outChNo     = self.latentChNo,	   # int       : Check and see the paper for latent size 😉
+    inChNo      = self.inChNo,         # int       : How many channels in RGB?
+    outChNo     = self.latentChNo,     # int       : Check and see the paper for latent size 😉
     norm        = self.norm,           # str *     : We all know that BatchNorm helps, but what about GroupNorm?😝
-    normKwargs  = self.normKwargs,	   # dict      : What params does BatchNorm have? (default: {})
-    activ       = self.activ,		   # str *     : Well, which is our favourite nonlinearity? 🤔              
-    activKwargs = self.activKwargs	   # dict      : What params does activ have? Maybe you can speed it up(default: {})
+    normKwargs  = self.normKwargs,     # dict      : What params does BatchNorm have? (default: {})
+    activ       = self.activ,          # str *     : Well, which is our favourite nonlinearity? 🤔
+    activKwargs = self.activKwargs     # dict      : What params does activ have? Maybe you can speed it up(default: {})
     strides     = self.encoderStrides, # list[int] : A list of 6 ints, where an element represents the stride at each step in ResNet
-    downType    = 'maxpool',		   # str       : Ho do we reduce spatial dims? ['maxpool', 'avgpool' or 'conv'] 
-    lastPool    = True,                # bool	   : This will take the last feature map, and remove the spatial dims by AvgPool
+    downType    = 'maxpool',           # str       : Ho do we reduce spatial dims? ['maxpool', 'avgpool' or 'conv'] 
+    lastPool    = True,                # bool       : This will take the last feature map, and remove the spatial dims by AvgPool
     archType    = self.archType,       # str       : ResNet architecture ['18','34']. For ResNet18, 1 epoch ~ 1 min (total 100 epochs)
-	).build()
+    ).build()
 
 # * Name taken from PyTorch (ex: BatchNorm2d, GroupNorm2d, ReLU, Tanh, etc)
 ```
@@ -161,18 +161,18 @@ The initialization process is similar with the one described at the previous mod
 
 ```python
 class SimCLR(nn.Module, Configurable):
-	def __init__(self, *args, **kwargs):
-		[...]
+    def __init__(self, *args, **kwargs):
+        [...]
         
     def build(self):
         self.encoder = ResNet( .... )  
-        self.project = MLP(...) 				<=== You will work here ⚠⚠⚠
+        self.project = MLP(...)                 <=== You will work here ⚠⚠⚠
         
         return self
-   	
+       
     def forward(self, inTensor):
         h = self.encoder(inTensor)
-        z = self.project(h)						<=== The effect ⚠⚠⚠
+        z = self.project(h)                        <=== The effect ⚠⚠⚠
         
         return h, z
    
@@ -189,19 +189,19 @@ This is projection function definition in the ```.build()``` method. By answerin
 
 ```python
 MLP(
-    inChNo          = self.latentChNo,	   # int       : How many channels in h latent?         
-    outChNo         = self.outChNo,	  	   # int       : Check and see the paper for latent size [rule of thumb dim(Z)<dim(H)] 😉
-    layerCfg		= self.mlpLayer, 	   # list[int] : mlp layer config, should have at most 3 hidden layers ex [64,64]
-    useBias			= self.useBias, 	   # bool      : Search in the paper. Usually not that revelant.
-    norm            = None,           	   # str *     : We all know that BatchNorm helps, but not here, so no normalization😝
-    normKwargs      = {},	   			   # dict      : No normalizaiton.. no arguments for it 
-    activ           = self.activ,		   # str *     : Well, which is our favourite nonlinearity? 🤔              
-    activKwargs     = self.activKwargs	   # dict      : What params does activ have? Maybe you can speed it up(default: {})
-    dropRate        = self.dropRate, 	   # float     : Dropout rate, in interval [0, 1]
-    dropLayers      = dropLayers,		   # int       : Apply dropout on this last no of layers
-    lastActiv       = None,                # str *	   : No activation prefferably 
-    lastActivKwargs = {},       		   # str       : No activation, no arguments 😊
-	).build()
+    inChNo          = self.latentChNo,   # int       : How many channels in h latent?
+    outChNo         = self.outChNo,      # int       : Check and see the paper for latent size [rule of thumb dim(Z)<dim(H)] 😉
+    layerCfg        = self.mlpLayer,     # list[int] : mlp layer config, should have at most 3 hidden layers ex [64,64]
+    useBias         = self.useBias,      # bool      : Search in the paper. Usually not that revelant.
+    norm            = None,              # str *     : We all know that BatchNorm helps, but not here, so no normalization😝
+    normKwargs      = {},                # dict      : No normalizaiton.. no arguments for it
+    activ           = self.activ,        # str *     : Well, which is our favourite nonlinearity? 🤔
+    activKwargs     = self.activKwargs   # dict      : What params does activ have? Maybe you can speed it up(default: {})
+    dropRate        = self.dropRate,     # float     : Dropout rate, in interval [0, 1]
+    dropLayers      = dropLayers,        # int       : Apply dropout on this last no of layers
+    lastActiv       = None,              # str *       : No activation prefferably
+    lastActivKwargs = {},                # str       : No activation, no arguments 😊
+    ).build()
 
 # * Name taken from PyTorch (ex: BatchNorm2d, GroupNorm2d, ReLU, Tanh, etc)
 ```
@@ -265,7 +265,7 @@ No hints.
 
 - Official Tensorflow implementation    [GitHub](https://github.com/google-research/simclr/blob/6bf69ce127ae33e181e1a6c5777c84570cb5d147/objective.py#L34)
 - Un-official PyTorch implementation 1  [GitHub](https://github.com/Spijkervet/SimCLR/blob/847eac3cb4f2e4102451c0c485d6968efa230901/simclr/modules/nt_xent.py)
-- Un-official PyTorch implementation 2 [GitHub](https://github.com/PyTorchLightning/pytorch-lightning-bolts/blob/86e3f52308fa02e2a988b4977858a945f7d15ab2/pl_bolts/models/self_supervised/simclr/simclr_module.py#L256) - ◀ most usefull 🥇
+- Un-official PyTorch implementation 2  [GitHub](https://github.com/PyTorchLightning/pytorch-lightning-bolts/blob/86e3f52308fa02e2a988b4977858a945f7d15ab2/pl_bolts/models/self_supervised/simclr/simclr_module.py#L256) - ◀ most usefull 🥇
 
 
 
