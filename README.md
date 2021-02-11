@@ -15,7 +15,7 @@ $ pip install -r requirements.txt
 
 SimCLR is a framework of contrastive learning that was introduced by Ting Chen et. al. in [A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v3.pdf) at ICML 2020(😮), that allows one to learn good representations form data without any express supervision. What does this mean? Think of fitting a CNN model on a completly new dataset, instead of training it from scratch, it is a very common practice to start with the weights trained on a learge and generalistic dataset, such as ImageNet (1000 classes with 1000 images/class). This speeds up the training process and helps one achieve better results, because the used encoder learned very good representations from data. However, when we don't have access to such a model, or when we want to train our model on a new dataset that has very few labeled samples we can use this method to obtain a similar effect.  In the image below, one can see that by using this method, one can acieve performances similar with supervised approaches. 
 
-<img src="./assets/images/image-20210211084309477.png" alt="image-20210211084309477" style="zoom: 50%;" />
+<img src="./assets/images/performance.png" alt="image-20210211084309477" style="zoom: 50%;" />
 
 
 
