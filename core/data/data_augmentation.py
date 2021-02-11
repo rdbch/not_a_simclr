@@ -34,22 +34,11 @@ class ImageTransforms:
 
     # ================================================== GET FIRST TRANSFORM ===========================================
     def get_first_transforms(self):
-        colorJitter = T.ColorJitter(0.8, 0.8, 0.8, 0.3)
-
-        return T.Compose([ T.RandomResizedCrop(size=self.imgSize),
-                           T.RandomHorizontalFlip(p=0.5),
-                           T.RandomApply([colorJitter], p=0.8),
-                           T.RandomGrayscale(p=0.2),
-                           T.ToTensor(),
-                           T.Normalize(IMAGENET_MEAN, IMAGENER_STD) ])
+        raise NotImplementedError('Please implement the first transform')       # <======= YOUR TASK #1.1
 
     # ================================================== GET SECOND TRANSFORM ==========================================
     def get_second_transforms(self):
-        return T.Compose([
-            T.transforms.Resize(size=self.imgSize),
-            T.transforms.ToTensor(),
-            T.Normalize(IMAGENET_MEAN, IMAGENER_STD)
-        ])
+        raise NotImplementedError('Please implement the second transform')       # <====== YOUR TASK #1.2
 
     # ================================================== CALL ==========================================================
     def __call__(self, images):
