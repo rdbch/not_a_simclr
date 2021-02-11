@@ -272,3 +272,20 @@ No hints.
 ### 3.5 Training
 
 In this section, if one did everything correct, one will be able to train the model. For this, you will you the ``./train `` directory. 
+
+## 4. Acknowledgement
+Let your divine entity of choice bless:
+    - [Spijkervet](https://github.com/Spijkervet)
+    - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
+
+Consider citing the original paper if you found this usefull:
+```
+@inproceedings{chen2020simple,
+  title={A simple framework for contrastive learning of visual representations},
+  author={Chen, Ting and Kornblith, Simon and Norouzi, Mohammad and Hinton, Geoffrey},
+  booktitle={International conference on machine learning},
+  pages={1597--1607},
+  year={2020},
+  organization={PMLR}
+}
+```
