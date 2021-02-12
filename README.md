@@ -21,7 +21,7 @@ $ pip install -r req_pip.txt
 SimCLR is a framework of contrastive learning that was introduced by Ting Chen et. al. in [A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v3.pdf) at ICML 2020(😮), that allows one to learn good representations form data without any express supervision. What does this mean? Think of fitting a CNN model on a completly new dataset, instead of training it from scratch, it is a very common practice to start with the weights trained on a learge and generalistic dataset, such as ImageNet (1000 classes with 1000 images/class). This speeds up the training process and helps one achieve better results, because the used encoder learned very good representations from data. However, when we don't have access to such a model, or when we want to train our model on a new dataset that has very few labeled samples we can use this method to obtain a similar effect.  In the image below, one can see that by using this method, one can acieve performances similar with supervised approaches. 
 
 <p align="center">
-    <img src="./assets/images/performance.png" width="400" height="400" />
+    <img src="./assets/images/performance.png" height="400" />
 </p>
 
 Long story short, this SimCLR is a 🏃‍♂️training method🏃‍♂️ that can be used to create a pretrained model for your custom dataset and not requiring any labels. It does this by maximizing the agreement between differently augmented views of the same image via a *contrastive loss* in the latent space. The produced network, can be further used to solve tasks, but keeping it would require some sorth of supervision. 
@@ -29,7 +29,7 @@ Long story short, this SimCLR is a 🏃‍♂️training method🏃‍♂️ tha
  During training, this framework is composed of 4 main components (for each component, more information will be presented in the **Task** section below): 
 
 <p align="center">
-    <img src="./assets/images/architecture.png" width="400" height="450" />
+    <img src="./assets/images/architecture.png" height="450" />
 </p>
 
 
