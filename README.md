@@ -81,7 +81,7 @@ class ImageTransforms:
    # define get_first_aug & get_second_aug
    # . . .
         
-    def __class__(self, image)
+    def __call__(self, image)
         firstAug  = self.firstAugTrans(image)
         secondAug = self.secondAugTrans(image)
       
