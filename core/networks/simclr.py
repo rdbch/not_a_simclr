@@ -48,7 +48,7 @@ class SimCLR(nn.Module, Configurable):
     @Configurable.hyper_params()
     def build_hparams(self, **kwargs):
         return {
-            'norm'           : 'BatchNorm2d',      'normKwargs'  : {},                  # <=== USE THIS FOR 2 AND 3
+            'norm'           : 'BatchNorm2d',      'normKwargs'  : {},
             'activ'          : 'ReLU',             'activKwargs' : {'inplace' : True},
             'encoderStrides' : [2, 2, 1, 1, 2, 2], 'mlpLayers'   : [128, 128],
             'dropRate'       :  None,              'dropLayers'  : 1,
@@ -62,14 +62,19 @@ class SimCLR(nn.Module, Configurable):
         :return:
         """
 
-        # IMPORTANT: Use above hparameters with <<self. >> such that they will be
-        # visible from "outside" and could be easily configurable
+        self.encoder = ResNet(inChNo   = self.inChNo,         outChNo     = self.latentChNo,
+                              norm     = self.norm,           normKwargs  = self.normKwargs,
+                              activ    = self.activ,          activKwargs = self.activKwargs,
+                              strides  = self.encoderStrides, downType    = 'maxpool',
+                              lastPool = True,                archType    = self.archType,
+                              ).build()
 
-        # Task 2
-        self.encoder = ResNet().build()                                                 # <======= YOUR TASK #2
-
-        # Task 3
-        self.project = MLP().build()                                                    # <======= YOUR TASK #3
+        self.project = MLP(inChNo   = self.latentChNo, outChNo     = self.outChNo,
+                           layerCfg = self.mlpLayers,  useBias     = False,
+                           norm     = None,            normKwargs  = {},
+                           activ    = self.activ,      activKwargs = self.activKwargs,
+                           dropRate = self.dropRate,   dropLayers  = self.dropLayers
+                           ).build()
 
         return self
 
