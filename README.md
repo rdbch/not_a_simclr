@@ -295,15 +295,31 @@ The results will also be visible in Tensorboard. For this, the common logDir is 
 $ tensorboard --logdir assets/logs
 ```
 
+## 4. Results
+This results were obtained using this configuration ```assets/experiments/base_simclr.yaml```:
+The dataset of choice is CIFAR10.
+
+<p align="center">
+    <img src="./assets/images/results.png" width="700" height="450" />
+</p>
+
+And these are some intermediary results obtained with **t-SNE**:
+
+<p align="center">
+    <img src="./assets/images/tsne.png" width="700" height="400" />
+</p>
 
 
-## 4. Acknowledgement
+
+
+
+## 5. Acknowledgement
 
 Let your divine entity of choice bless:
     - [Spijkervet](https://github.com/Spijkervet)
         - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
 
-Consider citing the original paper if you found this usefull:
+Consider citing the original paper if you found this useful:
 ```
 @inproceedings{chen2020simple,
   title={A simple framework for contrastive learning of visual representations},

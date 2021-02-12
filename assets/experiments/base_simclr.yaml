@@ -8,7 +8,7 @@ general:
 
 # ================================================== TRAIN =============================================================
 train:
-  noEpochs: 100                                         # Number of training epochs
+  noEpochs: 150                                         # Number of training epochs
   loadEpoch: 0                                          # Load epoch (used when resuming)
 
 # ================================================== DATA ==============================================================
@@ -25,8 +25,8 @@ data:
 model:
   kwargs:
     inChNo:         3                                   # RGB => 3 channels
-    latentChNo:     512                                 # Latent size H
-    outChNo :       64                                  # Latent size of Z
+    latentChNo:     1024                                # Latent size H
+    outChNo :       128                                 # Latent size of Z
     encoderStrides: [2, 2, 2, 2, 2, 2]                  # At each 2, the spatial dimension will be halfed
     mlpLayers:      [128, 128]                          # Layers in the MLP (projection function)
     norm:           'BatchNorm2d'                       # Normalization layer for encoder
@@ -49,7 +49,7 @@ optimizer:
   optimKwargs:
     betas:        (0.9, 0.999)
     weight_decay: 1e-06                                 # Weight decay should be small 1e-6 (regularization)
-  lr:             0.0003                                # Small learning rate 3e-4
+  lr:             0.0007                                # Small learning rate 3e-4
   schedPack:      'torch.optim.lr_scheduler'            # Learning rate scheduler package
   schedName:      None                                  # Learning rate scheduler name
   schedKwargs:    {}                                    # I did not find it that usefull to train with LrSched
