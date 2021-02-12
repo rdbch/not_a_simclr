@@ -1,33 +1,36 @@
-# SimCLR - A naive tutorial
+# SimCLR
+
+A simplified tutorial for [A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v3.pdf).
 
 ## 1. Installation
 #### Conda
 If CUDA 10.2 is compatible with your device, you can simply create your environment with 
-```
+```shell
 $ conda create --name <env> --file req_conda.txt
 ```
 
 #### pip
 If one does not use Conda, you can manually install PyTorch from this [link](https://pytorch.org/get-started/locally/) and get your other requirements by running:
-```
+```shell
 $ pip install -r req_pip.txt
 ```
 
 
-## 2. Theoretical informations
+## 2. Introduction
 
 SimCLR is a framework of contrastive learning that was introduced by Ting Chen et. al. in [A Simple Framework for Contrastive Learning of Visual Representations](https://arxiv.org/pdf/2002.05709v3.pdf) at ICML 2020(😮), that allows one to learn good representations form data without any express supervision. What does this mean? Think of fitting a CNN model on a completly new dataset, instead of training it from scratch, it is a very common practice to start with the weights trained on a learge and generalistic dataset, such as ImageNet (1000 classes with 1000 images/class). This speeds up the training process and helps one achieve better results, because the used encoder learned very good representations from data. However, when we don't have access to such a model, or when we want to train our model on a new dataset that has very few labeled samples we can use this method to obtain a similar effect.  In the image below, one can see that by using this method, one can acieve performances similar with supervised approaches. 
 
-<img src="./assets/images/performance.png" alt="image-20210211084309477" style="zoom: 50%;" />
-
-
+<p align="center">
+    <img src="./assets/images/performance.png" width="400" height="400" />
+</p>
 
 Long story short, this SimCLR is a 🏃‍♂️training method🏃‍♂️ that can be used to create a pretrained model for your custom dataset and not requiring any labels. It does this by maximizing the agreement between differently augmented views of the same image via a *contrastive loss* in the latent space. The produced network, can be further used to solve tasks, but keeping it would require some sorth of supervision. 
 
  During training, this framework is composed of 4 main components (for each component, more information will be presented in the **Task** section below): 
 
-<img src="./assets/images/architecture.png" alt="image-20210211084754141" style="zoom: 67%;" />
-
+<p align="center">
+    <img src="./assets/images/architecture.png" width="400" height="450" />
+</p>
 
 
 1. **Image augmentation :** Module responsible with generating two correlated views of the same example. 
@@ -266,7 +269,7 @@ No hints.
 
 **References**
 
-- Official Tensorflow implementation    [GitHub](https://github.com/google-research/simclr/blob/6bf69ce127ae33e181e1a6c5777c84570cb5d147/objective.py#L34)
+- Official Tensorflow implementation      [GitHub](https://github.com/google-research/simclr/blob/6bf69ce127ae33e181e1a6c5777c84570cb5d147/objective.py#L34)
 - Un-official PyTorch implementation 1  [GitHub](https://github.com/Spijkervet/SimCLR/blob/847eac3cb4f2e4102451c0c485d6968efa230901/simclr/modules/nt_xent.py)
 - Un-official PyTorch implementation 2  [GitHub](https://github.com/PyTorchLightning/pytorch-lightning-bolts/blob/86e3f52308fa02e2a988b4977858a945f7d15ab2/pl_bolts/models/self_supervised/simclr/simclr_module.py#L256) - ◀ most usefull 🥇
 
@@ -274,12 +277,31 @@ No hints.
 
 ### 3.5 Training
 
-In this section, if one did everything correct, one will be able to train the model. For this, you will you the ``./train `` directory. 
+In this section, if one did everything correct, one will be able to train the model and see its results in ***Tensorboard*** (😮). For this, one will you the ```./train ``` directory, where there are 3 files to be considered:
+
+-	``` train/main.py``` - script that starts the training
+-	``` train/trainer.py``` - where all the modules required for training are initialized such as ```data```, ```networks```, ```losses```, etc, and where the training logic is implemented ```optimiz_ parameters()```
+-	```train/config.py``` - where a skeleton for allowed configurations is. This is file only provides some default, and usually, for each experiment, one will have to merge it with an .yaml file
+
+**Start training:**
+
+``` shell
+$ python train/main.py -l assets/experiments/base_simclr.yaml
+```
+
+The results will also be visible in Tensorboard. For this, the common logDir is ```assets/logs ``` 
+
+``` shell
+$ tensorboard --logdir assets/logs
+```
+
+
 
 ## 4. Acknowledgement
+
 Let your divine entity of choice bless:
     - [Spijkervet](https://github.com/Spijkervet)
-    - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
+        - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
 
 Consider citing the original paper if you found this usefull:
 ```
