@@ -280,7 +280,7 @@ No hints.
 In this section, if one did everything correct, one will be able to train the model and see its results in ***Tensorboard*** (😮). For this, one will you the ```./train ``` directory, where there are 3 files to be considered:
 
 -	``` train/main.py``` - script that starts the training
--	``` train/trainer.py``` - where all the modules required for training are initialized such as ```data```, ```networks```, ```losses```, etc, and where the training logic is implemented ```optimiz_ parameters()```
+-	``` train/trainer.py``` - where all the modules required for training are initialized such as ```data```, ```networks```, ```losses```, etc, and where the training logic is implemented ```optimize_parameters()```
 -	```train/config.py``` - where a skeleton for allowed configurations is. This is file only provides some default, and usually, for each experiment, one will have to merge it with an .yaml file
 
 **Start training:**
