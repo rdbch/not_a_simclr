@@ -3,13 +3,13 @@
 ## 1. Installation
 #### Conda
 If CUDA 10.2 is compatible with your device, you can simply create your environment with 
-```
+```shell
 $ conda create --name <env> --file req_conda.txt
 ```
 
 #### pip
 If one does not use Conda, you can manually install PyTorch from this [link](https://pytorch.org/get-started/locally/) and get your other requirements by running:
-```
+```shell
 $ pip install -r req_pip.txt
 ```
 
@@ -266,7 +266,7 @@ No hints.
 
 **References**
 
-- Official Tensorflow implementation    [GitHub](https://github.com/google-research/simclr/blob/6bf69ce127ae33e181e1a6c5777c84570cb5d147/objective.py#L34)
+- Official Tensorflow implementation      [GitHub](https://github.com/google-research/simclr/blob/6bf69ce127ae33e181e1a6c5777c84570cb5d147/objective.py#L34)
 - Un-official PyTorch implementation 1  [GitHub](https://github.com/Spijkervet/SimCLR/blob/847eac3cb4f2e4102451c0c485d6968efa230901/simclr/modules/nt_xent.py)
 - Un-official PyTorch implementation 2  [GitHub](https://github.com/PyTorchLightning/pytorch-lightning-bolts/blob/86e3f52308fa02e2a988b4977858a945f7d15ab2/pl_bolts/models/self_supervised/simclr/simclr_module.py#L256) - ◀ most usefull 🥇
 
@@ -274,12 +274,31 @@ No hints.
 
 ### 3.5 Training
 
-In this section, if one did everything correct, one will be able to train the model. For this, you will you the ``./train `` directory. 
+In this section, if one did everything correct, one will be able to train the model and see its results in ***Tensorboard*** (😮). For this, one will you the ```./train ``` directory, where there are 3 files to be considered:
+
+-	``` train/main.py``` - script that starts the training
+-	``` train/trainer.py``` - where all the modules required for training are initialized such as ```data```, ```networks```, ```losses```, etc, and where the training logic is implemented ```optimiz_ parameters()```
+-	```train/config.py``` - where a skeleton for allowed configurations is. This is file only provides some default, and usually, for each experiment, one will have to merge it with an .yaml file
+
+**Start training:**
+
+``` shell
+$ python train/main.py -l assets/experiments/base_simclr.yaml
+```
+
+The results will also be visible in Tensorboard. For this, the common logDir is ```assets/logs ``` 
+
+``` shell
+$ tensorboard --logdir assets/logs
+```
+
+
 
 ## 4. Acknowledgement
+
 Let your divine entity of choice bless:
     - [Spijkervet](https://github.com/Spijkervet)
-    - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
+        - [PyTorch Lightning Bolts](https://github.com/PyTorchLightning/pytorch-lightning-bolts)
 
 Consider citing the original paper if you found this usefull:
 ```
